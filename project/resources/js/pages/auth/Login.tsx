@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import AuthService from "../../app/services/AuthService";
-import {User} from "../../types/user";
+import {User} from "../../types/";
 import {useHistory} from "react-router-dom";
 import {useAuth} from '../../hooks';
 
@@ -17,11 +17,16 @@ const Login: React.FC = () => {
     const {user, setUser} = useAuth();
 
     const onSubmit = async (data: FormData) => {
-        const user = await AuthService.signInWithEmailAndPassword(data.email, data.password);
-        setUser({...user as User});
-        history.push({
-            pathname: '/dashboard'
-        });
+        try {
+            const user = await AuthService.signInWithEmailAndPassword(data.email, data.password);
+            setUser({...user as User});
+            history.push({
+                pathname: '/dashboard'
+            });
+        }
+        catch (e) {
+            //
+        }
     };
 
     return (

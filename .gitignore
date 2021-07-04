@@ -57,3 +57,5 @@ Homestead.json
 
 src/*
 config/ssl/*
+
+*.log

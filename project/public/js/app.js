@@ -3717,20 +3717,33 @@ var Login = function Login() {
 
   var onSubmit = function onSubmit(data) {
     return __awaiter(void 0, void 0, void 0, function () {
-      var user;
+      var user_1, e_1;
       return __generator(this, function (_a) {
         switch (_a.label) {
           case 0:
+            _a.trys.push([0, 2,, 3]);
+
             return [4
             /*yield*/
             , AuthService_1["default"].signInWithEmailAndPassword(data.email, data.password)];
 
           case 1:
-            user = _a.sent();
-            setUser(__assign({}, user));
+            user_1 = _a.sent();
+            setUser(__assign({}, user_1));
             history.push({
               pathname: '/dashboard'
             });
+            return [3
+            /*break*/
+            , 3];
+
+          case 2:
+            e_1 = _a.sent();
+            return [3
+            /*break*/
+            , 3];
+
+          case 3:
             return [2
             /*return*/
             ];
