@@ -1,0 +1,177 @@
+version: '3.9'
+services:
+
+#  PHP Service
+  php:
+    build:
+      context: .
+      dockerfile: ./config/php/Dockerfile
+      args:
+        IMAGE: php:fpm
+        GID: ${APP_GID}
+        UID: ${APP_UID}
+    container_name: php
+    image: php
+    restart: unless-stopped
+    tty: true
+    working_dir: /var/www
+    volumes:
+      - ./project:/var/www
+      - ./config/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+      - ./log:/var/log
+    networks:
+      - app-network
+
+#  PHP CLI Service
+  php-cli:
+    build:
+      context: .
+      dockerfile: ./config/php-cli/Dockerfile
+      args:
+        IMAGE: php:cli
+        GID: ${APP_GID}
+        UID: ${APP_UID}
+    container_name: php-cli
+    image: php-cli
+    restart: "no"
+    tty: true
+    working_dir: /var/www
+    volumes:
+      - ./project:/var/www
+      - ./config/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+      - ./log:/var/log
+    networks:
+      - app-network
+
+#  PHPUnit Test Service
+#  phpunit:
+#    image: php-cli
+#    container_name: phpunit
+#    restart: "no"
+#    entrypoint: vendor/bin/phpunit
+#    tty: true
+#    working_dir: /var/www
+#    volumes:
+#      - ./project:/var/www
+#      - ./config/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+#      - ./log:/var/log
+#    networks:
+#      - app-network
+
+#  Laravel WebSockets Service
+  websockets:
+    image: php-cli
+    container_name: php-websockets
+    restart: unless-stopped
+    command: php artisan websockets:serve
+    ports:
+      - "6001:6001"
+    tty: true
+    working_dir: /var/www
+    volumes:
+      - ./project:/var/www
+      - ./config/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+      - ./log:/var/log
+    networks:
+      - app-network
+
+#  Redis Queues Dashboard Service
+#  horizon:
+#    image: php-cli
+#    container_name: php-horizon
+#    restart: unless-stopped
+#    command: php artisan horizon
+#    tty: true
+#    working_dir: /var/www
+#    volumes:
+#      - ./project:/var/www
+#      - ./config/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+#      - ./log:/var/log
+#    networks:
+#      - app-network
+
+#  Laravel Worker Service. Based on redis queues server
+  worker-websockets:
+    image: php-cli
+    container_name: worker-websockets
+    restart: unless-stopped
+    command: php artisan queue:work redis --queue=websockets --sleep=3 --tries=3
+    tty: true
+    working_dir: /var/www
+    volumes:
+      - ./project:/var/www
+      - ./config/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+      - ./log:/var/log
+    networks:
+      - app-network
+
+#  Nginx Service
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./project:/var/www
+      - ./config/nginx/conf.d/:/etc/nginx/conf.d/
+      - ./config/ssl/:/etc/nginx/ssl/
+      - ./log:/var/log
+    networks:
+      - app-network
+
+#  MySQL Service
+  mysql:
+    image: mysql:latest
+    command:
+      - '--log-bin-trust-function-creators=1'
+   #   - '--character-set-server=utf8mb4'
+    container_name: mysql
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    cap_add:
+      - SYS_NICE  # CAP_SYS_NICE, ERROR: mbind: Operation not permitted
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./config/mysql/conf.d:/etc/mysql/conf.d
+      - ./log:/var/log
+    networks:
+      - app-network
+
+#  Redis Service
+  redis:
+    image: redis:alpine
+    container_name: redis
+    restart: unless-stopped
+    tty: true
+#    Close access from outside
+#    ports:
+#      - "6379:6379"
+#    Access just for network
+    expose:
+      - "6379"
+    volumes:
+      - db-data:/var/lib/redis
+#      - ./config/redis/redis.conf:/etc/redis/redis.conf
+      - ./log:/var/log
+    networks:
+      - app-network
+
+# Docker Networks
+networks:
+  app-network:
+    driver: bridge
+
+# Volumes
+volumes:
+  db-data:
+    driver: local

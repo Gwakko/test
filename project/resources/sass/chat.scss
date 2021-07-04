@@ -1,0 +1,76 @@
+.chat-room {
+    .card {
+        width: 100%;
+        border: none;
+        border-radius: 15px
+    }
+
+    .adiv {
+        background: #04CB28;
+        border-radius: 15px;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+        font-size: 1.1rem;
+        height: 46px;
+    }
+
+    .chat {
+        border: none;
+        background: #E2FFE8;
+        font-size: 1.1rem;
+        border-radius: 20px
+    }
+
+    .chat-list {
+        position: relative;
+        display: block;
+        height: 600px;
+        overflow-y: auto;
+
+        .avatar {
+            width: 60px;
+            height: 60px;
+        }
+    }
+
+    .bg-white {
+        border: 1px solid #E7E7E9;
+        font-size: 1.1rem;
+        border-radius: 20px;
+    }
+
+    .myvideo img {
+        border-radius: 20px
+    }
+
+    .dot {
+        font-weight: bold
+    }
+
+    .chat-input {
+        position: relative;
+        padding-top: 25px;
+
+        .form-control {
+            border-radius: 12px;
+            border: 1px solid #F0F0F0;
+            font-size: 1.1rem;
+        }
+
+        .form-control:focus {
+            box-shadow: none;
+        }
+
+        .form-control::placeholder {
+            font-size: 1.1rem;
+            color: #C4C4C4;
+        }
+
+        .typing {
+            position: absolute;
+            display: inline-block;
+            top: 0;
+        }
+    }
+
+}

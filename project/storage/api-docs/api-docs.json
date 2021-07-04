@@ -1,0 +1,375 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Laravel OpenApi Demo Documentation",
+        "description": "L5 Swagger OpenApi description",
+        "contact": {
+            "email": "zvezdnev@gmail.com"
+        },
+        "license": {
+            "name": "Nginx 1.20",
+            "url": "http://nginx.org/LICENSE"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://community.test/api/v1",
+            "description": "Demo API Server"
+        }
+    ],
+    "paths": {
+        "/users/{to_user_id}/messages": {
+            "get": {
+                "tags": [
+                    "Messages"
+                ],
+                "summary": "Get list of messages",
+                "description": "Returns list of messages",
+                "operationId": "getMessagesList",
+                "parameters": [
+                    {
+                        "name": "to_user_id",
+                        "in": "path",
+                        "description": "Recipient ID",
+                        "required": true,
+                        "schema": {
+                            "type": "int64"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "token": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Messages"
+                ],
+                "summary": "Store new message",
+                "description": "Returns message data",
+                "operationId": "storeMessage",
+                "parameters": [
+                    {
+                        "name": "to_user_id",
+                        "in": "path",
+                        "description": "Recipient ID",
+                        "required": true,
+                        "schema": {
+                            "type": "int64"
+                        },
+                        "example": 1
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MessageRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Message"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "token": []
+                    }
+                ]
+            }
+        },
+        "/users": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get list of users",
+                "description": "Returns list of users",
+                "operationId": "getUsersList",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "token": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "MessageRequest": {
+                "title": "Store Message request",
+                "description": "Store Message request body data",
+                "required": [
+                    "message"
+                ],
+                "properties": {
+                    "message": {
+                        "title": "Message",
+                        "description": "Message content",
+                        "type": "string",
+                        "example": "A nice project"
+                    }
+                },
+                "type": "object"
+            },
+            "MessageResource": {
+                "title": "MessageResource",
+                "description": "Message resource",
+                "properties": {
+                    "data": {
+                        "title": "Data",
+                        "description": "Data wrapper",
+                        "type": "array",
+                        "items": {
+                            "ref": null
+                        }
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "MessageResource"
+                }
+            },
+            "UserResource": {
+                "title": "UserResource",
+                "description": "User resource",
+                "properties": {
+                    "data": {
+                        "title": "Data",
+                        "description": "Data wrapper",
+                        "type": "array",
+                        "items": {
+                            "ref": null
+                        }
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "UserResource"
+                }
+            },
+            "Message": {
+                "title": "Message",
+                "description": "Message model",
+                "properties": {
+                    "id": {
+                        "title": "ID",
+                        "description": "ID",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "user_id": {
+                        "title": "Author ID",
+                        "description": "Author's id of the message",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "to_user_id": {
+                        "title": "Recipient ID",
+                        "description": "Recipient's id of the messaget",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "message": {
+                        "title": "Message",
+                        "description": "Message content",
+                        "type": "string",
+                        "example": "A nice project"
+                    },
+                    "created_at": {
+                        "title": "Created at",
+                        "description": "Created at",
+                        "type": "string",
+                        "format": "datetime",
+                        "example": "2020-01-27 17:50:45"
+                    },
+                    "updated_at": {
+                        "title": "Updated at",
+                        "description": "Updated at",
+                        "type": "string",
+                        "format": "datetime",
+                        "example": "2020-01-27 17:50:45"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Mewssage"
+                }
+            },
+            "SocialIdentity": {
+                "title": "Social Identity",
+                "description": "Social Identity model",
+                "properties": {
+                    "id": {
+                        "title": "ID",
+                        "description": "ID",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "user_id": {
+                        "title": "User ID",
+                        "description": "User id of the social identity",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "provider": {
+                        "title": "Provider Name",
+                        "description": "Provider Name of the social identity",
+                        "type": "string",
+                        "example": "instagram"
+                    },
+                    "provider_id": {
+                        "title": "Provider ID",
+                        "description": "Provider id of the social identity. Original user id from Social Identity service",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "created_at": {
+                        "title": "Created at",
+                        "description": "Created at",
+                        "type": "string",
+                        "format": "datetime",
+                        "example": "2020-01-27 17:50:45"
+                    },
+                    "updated_at": {
+                        "title": "Updated at",
+                        "description": "Updated at",
+                        "type": "string",
+                        "format": "datetime",
+                        "example": "2020-01-27 17:50:45"
+                    },
+                    "user": {
+                        "title": "User",
+                        "description": "User model"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "SocialIdentity"
+                }
+            },
+            "User": {
+                "title": "User",
+                "description": "User model",
+                "properties": {
+                    "id": {
+                        "title": "ID",
+                        "description": "ID",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "name": {
+                        "title": "User Name",
+                        "description": "Name of the user",
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "email": {
+                        "title": "User Email",
+                        "description": "User Email",
+                        "type": "string",
+                        "example": "john.doe@example.com"
+                    },
+                    "nickname": {
+                        "title": "Nickname",
+                        "description": "Nickname of the user in social identity service",
+                        "type": "string",
+                        "example": "Unicorn"
+                    },
+                    "avatar_url": {
+                        "title": "Avatar Url",
+                        "description": "Avatar url in social identity service",
+                        "type": "string",
+                        "example": "https://example.com/static/user-unicorn.png"
+                    },
+                    "role": {
+                        "title": "User Role",
+                        "description": "User role in community",
+                        "type": "string",
+                        "example": "user"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "User"
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Community of bloggers",
+            "description": "API Endpoints of Community of bloggers"
+        }
+    ],
+    "security": [
+        []
+    ]
+}
