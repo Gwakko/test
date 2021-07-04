@@ -23,8 +23,8 @@ class MessageFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => $this->faker->numberBetween(),
-            'to_user_id' => $this->faker->numberBetween(),
+            'user_id' => $this->faker->numberBetween(1, 2),
+            'to_user_id' => $this->faker->numberBetween(1, 2),
             'message' => Str::random(26),
         ];
     }
