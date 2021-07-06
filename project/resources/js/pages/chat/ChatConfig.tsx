@@ -1,13 +1,13 @@
 import React from 'react';
 import {PagesConfig} from '../../types';
-import Chat from './Chat';
+import PrivateChat from './PrivateChat';
 
 const ChatConfig: PagesConfig = {
     auth: ['user'],
     routes: [
         {
             path: '/chat/:id',
-            component: () => <Chat />
+            component: () => <PrivateChat />
         }
     ]
 };

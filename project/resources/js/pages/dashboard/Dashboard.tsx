@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {User} from '../../types';
 import axios from "axios";
-import AppLayout from "../../shared/layouts/AppLayout";
+import AppLayout from "../../shared/ui/layouts/AppLayout";
 import {initUser} from "../../app/contexts/auth-context";
 import {useAuth} from "../../hooks";
 

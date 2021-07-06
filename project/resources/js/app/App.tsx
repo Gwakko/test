@@ -5,7 +5,7 @@ import Auth from './providers/Auth';
 import {Router} from 'react-router-dom';
 import Authorization from './providers/Authorization';
 import history from './history';
-import Layout from '../shared/layouts/Layout';
+import Layout from '../shared/ui/layouts/Layout';
 import './configs/defauls';
 import ChannelsProvider from './providers/ChannelsProvider';
 import ReactNotification from 'react-notifications-component';
