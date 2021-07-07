@@ -9,11 +9,23 @@ type Props = {
 };
 
 const Authorization = (props: Props) => {
-    const [isAccessGranted, setIsAccessGranted] = useState(false);
+    const [isAccessGranted, setIsAccessGranted] = useState(true);
 
     const app = useApp();
     const {user, setUser} = useAuth();
     const history = useHistory<HistoryState>();
+
+    useEffect(() => {
+        const matched = matchRoutes(app.routes, history.location.pathname)[0];
+
+        const auth = matched?.route?.auth || [];
+
+        setIsAccessGranted(
+            auth.length > 0
+                ? auth.includes(user.role)
+                : true
+        );
+    }, []);
 
     useEffect(() => {
         if (!isAccessGranted) {

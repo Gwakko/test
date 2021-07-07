@@ -1,5 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import axios from "axios";
+import React, {useEffect} from 'react';
 import {useHistory} from "react-router-dom";
 import AuthService from "../../app/services/AuthService";
 import {useAuth} from "../../hooks";

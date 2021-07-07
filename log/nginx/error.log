@@ -1107,3 +1107,50 @@
 2021/07/03 16:19:06 [notice] 1#1: start worker process 27
 2021/07/03 16:19:06 [notice] 1#1: start worker process 28
 2021/07/03 16:19:06 [notice] 1#1: start worker process 29
+2021/07/07 10:43:21 [notice] 1#1: signal 3 (SIGQUIT) received, shutting down
+2021/07/07 10:43:21 [notice] 23#23: gracefully shutting down
+2021/07/07 10:43:21 [notice] 24#24: gracefully shutting down
+2021/07/07 10:43:21 [notice] 25#25: gracefully shutting down
+2021/07/07 10:43:21 [notice] 22#22: gracefully shutting down
+2021/07/07 10:43:21 [notice] 28#28: gracefully shutting down
+2021/07/07 10:43:21 [notice] 29#29: gracefully shutting down
+2021/07/07 10:43:21 [notice] 26#26: gracefully shutting down
+2021/07/07 10:43:21 [notice] 27#27: gracefully shutting down
+2021/07/07 10:43:21 [notice] 23#23: exiting
+2021/07/07 10:43:21 [notice] 24#24: exiting
+2021/07/07 10:43:21 [notice] 25#25: exiting
+2021/07/07 10:43:21 [notice] 28#28: exiting
+2021/07/07 10:43:21 [notice] 25#25: exit
+2021/07/07 10:43:21 [notice] 27#27: exiting
+2021/07/07 10:43:21 [notice] 23#23: exit
+2021/07/07 10:43:21 [notice] 29#29: exiting
+2021/07/07 10:43:21 [notice] 28#28: exit
+2021/07/07 10:43:21 [notice] 24#24: exit
+2021/07/07 10:43:21 [notice] 27#27: exit
+2021/07/07 10:43:21 [notice] 29#29: exit
+2021/07/07 10:43:21 [notice] 26#26: exiting
+2021/07/07 10:43:21 [notice] 26#26: exit
+2021/07/07 10:43:21 [notice] 1#1: signal 17 (SIGCHLD) received from 26
+2021/07/07 10:43:21 [notice] 1#1: worker process 23 exited with code 0
+2021/07/07 10:43:21 [notice] 1#1: worker process 25 exited with code 0
+2021/07/07 10:43:21 [notice] 1#1: worker process 24 exited with code 0
+2021/07/07 10:43:21 [notice] 1#1: worker process 26 exited with code 0
+2021/07/07 10:43:21 [notice] 1#1: worker process 27 exited with code 0
+2021/07/07 10:43:21 [notice] 1#1: worker process 28 exited with code 0
+2021/07/07 10:43:21 [notice] 1#1: worker process 29 exited with code 0
+2021/07/07 10:43:21 [notice] 1#1: signal 29 (SIGIO) received
+2021/07/07 10:43:21 [notice] 1#1: signal 17 (SIGCHLD) received from 27
+2021/07/07 10:45:16 [notice] 1#1: using the "epoll" event method
+2021/07/07 10:45:16 [notice] 1#1: nginx/1.21.0
+2021/07/07 10:45:16 [notice] 1#1: built by gcc 10.2.1 20201203 (Alpine 10.2.1_pre1) 
+2021/07/07 10:45:16 [notice] 1#1: OS: Linux 4.19.121-linuxkit
+2021/07/07 10:45:16 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2021/07/07 10:45:16 [notice] 1#1: start worker processes
+2021/07/07 10:45:16 [notice] 1#1: start worker process 23
+2021/07/07 10:45:16 [notice] 1#1: start worker process 24
+2021/07/07 10:45:16 [notice] 1#1: start worker process 25
+2021/07/07 10:45:16 [notice] 1#1: start worker process 26
+2021/07/07 10:45:16 [notice] 1#1: start worker process 27
+2021/07/07 10:45:16 [notice] 1#1: start worker process 28
+2021/07/07 10:45:16 [notice] 1#1: start worker process 29
+2021/07/07 10:45:16 [notice] 1#1: start worker process 30

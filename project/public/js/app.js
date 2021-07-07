@@ -2001,7 +2001,7 @@ var Authorization_1 = __importDefault(__webpack_require__(/*! ./providers/Author
 
 var history_1 = __importDefault(__webpack_require__(/*! ./history */ "./resources/js/app/history.ts"));
 
-var Layout_1 = __importDefault(__webpack_require__(/*! ../shared/layouts/Layout */ "./resources/js/shared/layouts/Layout.tsx"));
+var Layout_1 = __importDefault(__webpack_require__(/*! ../shared/ui/layouts/Layout */ "./resources/js/shared/ui/layouts/Layout.tsx"));
 
 __webpack_require__(/*! ./configs/defauls */ "./resources/js/app/configs/defauls.ts");
 
@@ -2065,8 +2065,8 @@ var pusherConfig = {
   cluster: "mt1" || 0,
   // auth endpoint for private channels
   // e.g. for Laravel https://example.com/api/broadcasting/auth
-  authEndpoint: "broadcasting/auth" || 0,
-  wsHost: "community.test" || 0,
+  authEndpoint: "/broadcasting/auth" || 0,
+  wsHost: "localhost" || 0,
   wsPort:  true ? +"6001" : 0,
   forceTLS: false
 };
@@ -2599,7 +2599,7 @@ var react_router_config_1 = __webpack_require__(/*! react-router-config */ "./no
 var hooks_1 = __webpack_require__(/*! ../../hooks */ "./resources/js/hooks/index.ts");
 
 var Authorization = function Authorization(props) {
-  var _a = react_1.useState(false),
+  var _a = react_1.useState(true),
       isAccessGranted = _a[0],
       setIsAccessGranted = _a[1];
 
@@ -2610,6 +2610,13 @@ var Authorization = function Authorization(props) {
       setUser = _b.setUser;
 
   var history = react_router_dom_1.useHistory();
+  react_1.useEffect(function () {
+    var _a;
+
+    var matched = react_router_config_1.matchRoutes(app.routes, history.location.pathname)[0];
+    var auth = ((_a = matched === null || matched === void 0 ? void 0 : matched.route) === null || _a === void 0 ? void 0 : _a.auth) || [];
+    setIsAccessGranted(auth.length > 0 ? auth.includes(user.role) : true);
+  }, []);
   react_1.useEffect(function () {
     if (!isAccessGranted) {
       redirectRoute();
@@ -3293,6 +3300,387 @@ exports.generateRoutesFromConfigs = generateRoutesFromConfigs;
 
 /***/ }),
 
+/***/ "./resources/js/features/chat/Chat.tsx":
+/*!*********************************************!*\
+  !*** ./resources/js/features/chat/Chat.tsx ***!
+  \*********************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __assign = this && this.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  Object.defineProperty(o, k2, {
+    enumerable: true,
+    get: function get() {
+      return m[k];
+    }
+  });
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  }
+
+  __setModuleDefault(result, mod);
+
+  return result;
+};
+
+var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, generator) {
+  function adopt(value) {
+    return value instanceof P ? value : new P(function (resolve) {
+      resolve(value);
+    });
+  }
+
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function step(result) {
+      result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+    }
+
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+
+var __generator = this && this.__generator || function (thisArg, body) {
+  var _ = {
+    label: 0,
+    sent: function sent() {
+      if (t[0] & 1) throw t[1];
+      return t[1];
+    },
+    trys: [],
+    ops: []
+  },
+      f,
+      y,
+      t,
+      g;
+  return g = {
+    next: verb(0),
+    "throw": verb(1),
+    "return": verb(2)
+  }, typeof Symbol === "function" && (g[Symbol.iterator] = function () {
+    return this;
+  }), g;
+
+  function verb(n) {
+    return function (v) {
+      return step([n, v]);
+    };
+  }
+
+  function step(op) {
+    if (f) throw new TypeError("Generator is already executing.");
+
+    while (_) {
+      try {
+        if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+        if (y = 0, t) op = [op[0] & 2, t.value];
+
+        switch (op[0]) {
+          case 0:
+          case 1:
+            t = op;
+            break;
+
+          case 4:
+            _.label++;
+            return {
+              value: op[1],
+              done: false
+            };
+
+          case 5:
+            _.label++;
+            y = op[1];
+            op = [0];
+            continue;
+
+          case 7:
+            op = _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+
+          default:
+            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+              _ = 0;
+              continue;
+            }
+
+            if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+              _.label = op[1];
+              break;
+            }
+
+            if (op[0] === 6 && _.label < t[1]) {
+              _.label = t[1];
+              t = op;
+              break;
+            }
+
+            if (t && _.label < t[2]) {
+              _.label = t[2];
+
+              _.ops.push(op);
+
+              break;
+            }
+
+            if (t[2]) _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+        }
+
+        op = body.call(thisArg, _);
+      } catch (e) {
+        op = [6, e];
+        y = 0;
+      } finally {
+        f = t = 0;
+      }
+    }
+
+    if (op[0] & 5) throw op[1];
+    return {
+      value: op[0] ? op[1] : void 0,
+      done: true
+    };
+  }
+};
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+
+var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var Message_1 = __importDefault(__webpack_require__(/*! ./Message */ "./resources/js/features/chat/Message.tsx"));
+
+var hooks_1 = __webpack_require__(/*! ../../hooks */ "./resources/js/hooks/index.ts");
+
+var NOTIFICATION_EVENT = '.chat.message.new';
+
+var Chat = function Chat(_a) {
+  var user = _a.user,
+      messages = _a.messages,
+      isLoading = _a.isLoading,
+      onTyping = _a.onTyping,
+      onPressEnter = _a.onPressEnter;
+
+  var _b = react_1.useState(false),
+      isTyping = _b[0],
+      setIsTyping = _b[1];
+
+  var _c = react_1.useState(''),
+      message = _c[0],
+      setMessage = _c[1];
+
+  var chatListRef = react_1.useRef(null);
+  var timerRef = react_1.useRef(null);
+  var channels = hooks_1.useChannels();
+  var chatChannel = react_1.useMemo(function () {
+    return channels && channels["private"]("chat." + user.id);
+  }, [channels, user.id]);
+  var handlerOnTyping = react_1.useCallback(function (event) {
+    if (onTyping) onTyping(event, message);
+  }, [onTyping]);
+  var handlerOnChange = react_1.useCallback(function (event) {
+    setMessage(event.currentTarget.value);
+  }, []);
+  var handlerOnKeyDown = react_1.useCallback(function (event) {
+    return __awaiter(void 0, void 0, void 0, function () {
+      return __generator(this, function (_a) {
+        if (onPressEnter && 'Enter' === event.key) onPressEnter(message);
+        setMessage('');
+        return [2
+        /*return*/
+        ];
+      });
+    });
+  }, [onPressEnter]);
+  react_1.useEffect(function () {
+    if (!chatListRef.current) return;
+    chatListRef.current.scrollTop = chatListRef.current.scrollHeight;
+  }, [messages]);
+  react_1.useEffect(function () {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+
+    if (isTyping) {
+      timerRef.current = setTimeout(function () {
+        return setIsTyping(false);
+      }, 1000);
+    }
+  }, [isTyping]);
+  react_1.useEffect(function () {
+    if (!chatChannel) {
+      return;
+    }
+
+    chatChannel.listen(NOTIFICATION_EVENT, function (event) {
+      console.log(event);
+    }).listenForWhisper('typing', function (event) {
+      setIsTyping(event.isTyping);
+    });
+    return function () {
+      chatChannel.stopListening(NOTIFICATION_EVENT);
+    };
+  }, [chatChannel]);
+  return react_1["default"].createElement("div", {
+    className: "card"
+  }, react_1["default"].createElement("div", {
+    className: "d-flex flex-row justify-content-between p-3 adiv text-white"
+  }, react_1["default"].createElement("i", {
+    className: "fas fa-chevron-left"
+  }), " ", react_1["default"].createElement("span", {
+    className: "pb-3"
+  }, "Live chat"), " ", react_1["default"].createElement("i", {
+    className: "fas fa-times"
+  })), react_1["default"].createElement("div", {
+    className: "chat-list",
+    ref: chatListRef
+  }, isLoading && react_1["default"].createElement("div", {
+    className: "d-flex flex-row p-3"
+  }, react_1["default"].createElement("div", {
+    className: "chat ml-2 p-3"
+  }, "Loading...")), messages.map(function (message) {
+    return react_1["default"].createElement(Message_1["default"], __assign({
+      isSender: user.id === message.user_id
+    }, message));
+  })), react_1["default"].createElement("div", {
+    className: "form-group px-3 chat-input"
+  }, react_1["default"].createElement("input", {
+    type: "text",
+    className: "form-control",
+    placeholder: "Type your message",
+    value: message,
+    onInput: handlerOnTyping,
+    onKeyDown: handlerOnKeyDown,
+    onChange: handlerOnChange
+  }), isTyping && react_1["default"].createElement("span", {
+    className: "typing text-muted"
+  }, "User typing...")));
+};
+
+exports.default = react_1["default"].memo(Chat);
+
+/***/ }),
+
+/***/ "./resources/js/features/chat/Message.tsx":
+/*!************************************************!*\
+  !*** ./resources/js/features/chat/Message.tsx ***!
+  \************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+
+var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var Message = function Message(_a) {
+  var isSender = _a.isSender,
+      message = _a.message,
+      id = _a.id;
+  return react_1["default"].createElement(react_1["default"].Fragment, null, isSender ? react_1["default"].createElement("div", {
+    className: "d-flex flex-row p-3",
+    key: id
+  }, react_1["default"].createElement("img", {
+    className: "avatar",
+    src: "https://img.icons8.com/color/48/000000/circled-user-female-skin-type-7.png",
+    width: "30",
+    height: "30"
+  }), react_1["default"].createElement("div", {
+    className: "chat ml-2 p-3"
+  }, message)) : react_1["default"].createElement("div", {
+    className: "d-flex flex-row p-3 justify-content-end",
+    key: id
+  }, react_1["default"].createElement("div", {
+    className: "bg-white mr-2 p-3"
+  }, react_1["default"].createElement("span", {
+    className: "text-muted"
+  }, message)), react_1["default"].createElement("img", {
+    className: "avatar",
+    src: "https://img.icons8.com/color/48/000000/circled-user-male-skin-type-7.png",
+    width: "30",
+    height: "30"
+  })));
+};
+
+exports.default = Message;
+
+/***/ }),
+
 /***/ "./resources/js/hooks/index.ts":
 /*!*************************************!*\
   !*** ./resources/js/hooks/index.ts ***!
@@ -3972,10 +4360,46 @@ exports.default = CallbackConfig;
 
 /***/ }),
 
-/***/ "./resources/js/pages/chat/Chat.tsx":
-/*!******************************************!*\
+/***/ "./resources/js/pages/chat/ChatConfig.tsx":
+/*!************************************************!*\
+  !*** ./resources/js/pages/chat/ChatConfig.tsx ***!
+  \************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+
+var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var PrivateChat_1 = __importDefault(__webpack_require__(/*! ./PrivateChat */ "./resources/js/pages/chat/PrivateChat.tsx"));
+
+var ChatConfig = {
+  auth: ['user'],
+  routes: [{
+    path: '/chat/:id',
+    component: function component() {
+      return react_1["default"].createElement(PrivateChat_1["default"], null);
+    }
+  }]
+};
+exports.default = ChatConfig;
+
+/***/ }),
+
+/***/ "./resources/js/pages/chat/PrivateChat.tsx":
+/*!*************************************************!*\
   !*** ./resources/js/pages/chat/PrivateChat.tsx ***!
-  \******************************************/
+  \*************************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -4182,57 +4606,37 @@ var react_router_dom_1 = __webpack_require__(/*! react-router-dom */ "./node_mod
 
 var axios_1 = __importDefault(__webpack_require__(/*! axios */ "./node_modules/axios/index.js"));
 
-var AppLayout_1 = __importDefault(__webpack_require__(/*! ../../shared/layouts/AppLayout */ "./resources/js/shared/layouts/AppLayout.tsx"));
+var AppLayout_1 = __importDefault(__webpack_require__(/*! ../../shared/ui/layouts/AppLayout */ "./resources/js/shared/ui/layouts/AppLayout.tsx"));
 
 var hooks_1 = __webpack_require__(/*! ../../hooks */ "./resources/js/hooks/index.ts");
 
-var NOTIFICATION_EVENT = '.chat.message.new';
+var Chat_1 = __importDefault(__webpack_require__(/*! ../../features/chat/Chat */ "./resources/js/features/chat/Chat.tsx"));
 
-var Chat = function Chat() {
+var PrivateChat = function PrivateChat() {
   var _a = react_1.useState([]),
       messages = _a[0],
       setMessages = _a[1];
 
-  var _b = react_1.useState(false),
-      isTyping = _b[0],
-      setIsTyping = _b[1];
+  var _b = react_1.useState(true),
+      isLoading = _b[0],
+      setIsLoading = _b[1];
 
-  var _c = react_1.useState(''),
-      message = _c[0],
-      setMessage = _c[1];
-
-  var _d = react_1.useState(true),
-      isLoading = _d[0],
-      setIsLoading = _d[1];
-
-  var timerRef = react_1.useRef(null);
-  var chatListRef = react_1.useRef(null);
   var id = react_router_dom_1.useParams().id;
   var user = hooks_1.useAuth().user;
-  var channels = hooks_1.useChannels();
-  var chatChannel = react_1.useMemo(function () {
-    return channels && channels["private"]("chat." + user.id);
-  }, [channels, user.id]);
-
-  var handlerTyping = function handlerTyping() {// chatChannel.whisper('typing', {
+  var handlerTyping = react_1.useCallback(function () {// chatChannel.whisper('typing', {
     //     user: id,
     //     isTyping: true
     // })
-  };
-
-  var handlerOnChange = function handlerOnChange(event) {
-    setMessage(event.currentTarget.value);
-  };
-
-  var handlerPressKey = function handlerPressKey(event) {
+  }, []);
+  var handlerPressKey = react_1.useCallback(function (message) {
     return __awaiter(void 0, void 0, void 0, function () {
-      var data_1;
+      var data;
       return __generator(this, function (_a) {
         switch (_a.label) {
           case 0:
-            if (!('Enter' === event.key && message.trim().length > 0)) return [3
-            /*break*/
-            , 2];
+            if (message.trim().length === 0) return [2
+            /*return*/
+            ];
             return [4
             /*yield*/
             , axios_1["default"].post("/api/v1/users/" + id + "/messages", {
@@ -4240,21 +4644,17 @@ var Chat = function Chat() {
             })];
 
           case 1:
-            data_1 = _a.sent().data;
+            data = _a.sent().data;
             setMessages(function (prevState) {
-              return __spreadArray(__spreadArray([], prevState), [data_1.data]);
+              return __spreadArray(__spreadArray([], prevState), [data.data]);
             });
-            setMessage('');
-            _a.label = 2;
-
-          case 2:
             return [2
             /*return*/
             ];
         }
       });
     });
-  };
+  }, []);
 
   var subscribe = function subscribe() {
     return __awaiter(void 0, void 0, void 0, function () {
@@ -4345,35 +4745,6 @@ var Chat = function Chat() {
       setIsLoading(false);
     }
   }, [messages]);
-  react_1.useEffect(function () {
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-    }
-
-    if (isTyping) {
-      timerRef.current = setTimeout(function () {
-        return setIsTyping(false);
-      }, 1000);
-    }
-  }, [isTyping]);
-  react_1.useEffect(function () {
-    if (!chatChannel) {
-      return;
-    }
-
-    chatChannel.listen(NOTIFICATION_EVENT, function (event) {
-      console.log(event);
-    }).listenForWhisper('typing', function (event) {
-      setIsTyping(event.isTyping);
-    });
-    return function () {
-      chatChannel.stopListening(NOTIFICATION_EVENT);
-    };
-  }, [chatChannel]);
-  react_1.useEffect(function () {
-    if (!chatListRef.current) return;
-    chatListRef.current.scrollTop = chatListRef.current.scrollHeight;
-  }, [messages]);
   return react_1["default"].createElement(AppLayout_1["default"], null, react_1["default"].createElement("main", {
     className: "py-4"
   }, react_1["default"].createElement("div", {
@@ -4390,100 +4761,16 @@ var Chat = function Chat() {
   }, react_1["default"].createElement("i", {
     className: "fas fa-arrow-left"
   }), " Back To Dashboard"))), react_1["default"].createElement("div", {
-    className: "w-100 d-flex justify-content-center"
-  }, react_1["default"].createElement("div", {
-    className: "card mt-5"
-  }, react_1["default"].createElement("div", {
-    className: "d-flex flex-row justify-content-between p-3 adiv text-white"
-  }, react_1["default"].createElement("i", {
-    className: "fas fa-chevron-left"
-  }), " ", react_1["default"].createElement("span", {
-    className: "pb-3"
-  }, "Live chat"), " ", react_1["default"].createElement("i", {
-    className: "fas fa-times"
-  })), react_1["default"].createElement("div", {
-    className: "chat-list",
-    ref: chatListRef
-  }, isLoading && react_1["default"].createElement("div", {
-    className: "d-flex flex-row p-3"
-  }, react_1["default"].createElement("div", {
-    className: "chat ml-2 p-3"
-  }, "Loading...")), messages.map(function (message) {
-    return user.id === message.user_id ? react_1["default"].createElement("div", {
-      className: "d-flex flex-row p-3",
-      key: message.id
-    }, react_1["default"].createElement("img", {
-      className: "avatar",
-      src: "https://img.icons8.com/color/48/000000/circled-user-female-skin-type-7.png",
-      width: "30",
-      height: "30"
-    }), react_1["default"].createElement("div", {
-      className: "chat ml-2 p-3"
-    }, message.message)) : react_1["default"].createElement("div", {
-      className: "d-flex flex-row p-3 justify-content-end",
-      key: message.id
-    }, react_1["default"].createElement("div", {
-      className: "bg-white mr-2 p-3"
-    }, react_1["default"].createElement("span", {
-      className: "text-muted"
-    }, message.message)), react_1["default"].createElement("img", {
-      className: "avatar",
-      src: "https://img.icons8.com/color/48/000000/circled-user-male-skin-type-7.png",
-      width: "30",
-      height: "30"
-    }));
-  })), react_1["default"].createElement("div", {
-    className: "form-group px-3 chat-input"
-  }, react_1["default"].createElement("input", {
-    type: "text",
-    className: "form-control",
-    placeholder: "Type your message",
-    value: message,
-    onInput: handlerTyping,
-    onKeyDown: handlerPressKey,
-    onChange: handlerOnChange
-  }), isTyping && react_1["default"].createElement("span", {
-    className: "typing text-muted"
-  }, "User typing..."))))))));
+    className: "w-100 d-flex justify-content-center pt-5"
+  }, react_1["default"].createElement(Chat_1["default"], {
+    user: user,
+    messages: messages,
+    onPressEnter: handlerPressKey,
+    onTyping: handlerTyping
+  }))))));
 };
 
-exports.default = Chat;
-
-/***/ }),
-
-/***/ "./resources/js/pages/chat/ChatConfig.tsx":
-/*!************************************************!*\
-  !*** ./resources/js/pages/chat/ChatConfig.tsx ***!
-  \************************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var __importDefault = this && this.__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-
-var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-
-var Chat_1 = __importDefault(__webpack_require__(/*! ./PrivateChat */ "./resources/js/pages/chat/Chat.tsx"));
-
-var ChatConfig = {
-  auth: ['user'],
-  routes: [{
-    path: '/chat/:id',
-    component: function component() {
-      return react_1["default"].createElement(Chat_1["default"], null);
-    }
-  }]
-};
-exports.default = ChatConfig;
+exports.default = PrivateChat;
 
 /***/ }),
 
@@ -4546,7 +4833,7 @@ var react_router_dom_1 = __webpack_require__(/*! react-router-dom */ "./node_mod
 
 var axios_1 = __importDefault(__webpack_require__(/*! axios */ "./node_modules/axios/index.js"));
 
-var AppLayout_1 = __importDefault(__webpack_require__(/*! ../../shared/layouts/AppLayout */ "./resources/js/shared/layouts/AppLayout.tsx"));
+var AppLayout_1 = __importDefault(__webpack_require__(/*! ../../shared/ui/layouts/AppLayout */ "./resources/js/shared/ui/layouts/AppLayout.tsx"));
 
 var auth_context_1 = __webpack_require__(/*! ../../app/contexts/auth-context */ "./resources/js/app/contexts/auth-context.tsx");
 
@@ -4717,10 +5004,10 @@ exports.default = ErrorsConfig;
 
 /***/ }),
 
-/***/ "./resources/js/shared/layouts/AppLayout.tsx":
-/*!***************************************************!*\
-  !*** ./resources/js/shared/layouts/AppLayout.tsx ***!
-  \***************************************************/
+/***/ "./resources/js/shared/ui/layouts/AppLayout.tsx":
+/*!******************************************************!*\
+  !*** ./resources/js/shared/ui/layouts/AppLayout.tsx ***!
+  \******************************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -4917,11 +5204,11 @@ var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/reac
 
 var classnames_1 = __importDefault(__webpack_require__(/*! classnames */ "./node_modules/classnames/index.js"));
 
-var AuthService_1 = __importDefault(__webpack_require__(/*! ../../app/services/AuthService */ "./resources/js/app/services/AuthService.ts"));
+var AuthService_1 = __importDefault(__webpack_require__(/*! ../../../app/services/AuthService */ "./resources/js/app/services/AuthService.ts"));
 
 var react_router_dom_1 = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 
-var hooks_1 = __webpack_require__(/*! ../../hooks */ "./resources/js/hooks/index.ts");
+var hooks_1 = __webpack_require__(/*! ../../../hooks */ "./resources/js/hooks/index.ts");
 
 var AppLayout = function AppLayout(props) {
   var _a = react_1.useState(false),
@@ -5017,10 +5304,10 @@ exports.default = AppLayout;
 
 /***/ }),
 
-/***/ "./resources/js/shared/layouts/Layout.tsx":
-/*!************************************************!*\
-  !*** ./resources/js/shared/layouts/Layout.tsx ***!
-  \************************************************/
+/***/ "./resources/js/shared/ui/layouts/Layout.tsx":
+/*!***************************************************!*\
+  !*** ./resources/js/shared/ui/layouts/Layout.tsx ***!
+  \***************************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -5042,7 +5329,7 @@ var react_router_config_1 = __webpack_require__(/*! react-router-config */ "./no
 
 var react_router_dom_1 = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 
-var hooks_1 = __webpack_require__(/*! ../../hooks */ "./resources/js/hooks/index.ts");
+var hooks_1 = __webpack_require__(/*! ../../../hooks */ "./resources/js/hooks/index.ts");
 
 var Layout = function Layout(props) {
   var app = hooks_1.useApp();
@@ -39463,7 +39750,7 @@ function injectIntoDevTools(devToolsConfig) {
     scheduleRoot:  scheduleRoot ,
     setRefreshHandler:  setRefreshHandler ,
     // Enables DevTools to append owner stacks to error messages in DEV mode.
-    getCurrentFiber:  getCurrentFiberForDevTools
+    getCurrentFiber:  getCurrentFiberForDevTools 
   });
 }
 
@@ -46700,7 +46987,7 @@ function valueEqual(a, b) {
 /************************************************************************/
 /******/ 	// The module cache
 /******/ 	var __webpack_module_cache__ = {};
-/******/
+/******/ 	
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
 /******/ 		// Check if module is in cache
@@ -46714,17 +47001,17 @@ function valueEqual(a, b) {
 /******/ 			// no module.loaded needed
 /******/ 			exports: {}
 /******/ 		};
-/******/
+/******/ 	
 /******/ 		// Execute the module function
 /******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
+/******/ 	
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-/******/
+/******/ 	
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = __webpack_modules__;
-/******/
+/******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/chunk loaded */
 /******/ 	(() => {
@@ -46756,7 +47043,7 @@ function valueEqual(a, b) {
 /******/ 			return result;
 /******/ 		};
 /******/ 	})();
-/******/
+/******/ 	
 /******/ 	/* webpack/runtime/compat get default export */
 /******/ 	(() => {
 /******/ 		// getDefaultExport function for compatibility with non-harmony modules
@@ -46768,7 +47055,7 @@ function valueEqual(a, b) {
 /******/ 			return getter;
 /******/ 		};
 /******/ 	})();
-/******/
+/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
@@ -46780,7 +47067,7 @@ function valueEqual(a, b) {
 /******/ 			}
 /******/ 		};
 /******/ 	})();
-/******/
+/******/ 	
 /******/ 	/* webpack/runtime/global */
 /******/ 	(() => {
 /******/ 		__webpack_require__.g = (function() {
@@ -46792,12 +47079,12 @@ function valueEqual(a, b) {
 /******/ 			}
 /******/ 		})();
 /******/ 	})();
-/******/
+/******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
 /******/ 	(() => {
 /******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
 /******/ 	})();
-/******/
+/******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
 /******/ 	(() => {
 /******/ 		// define __esModule on exports
@@ -46808,11 +47095,11 @@ function valueEqual(a, b) {
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
 /******/ 	})();
-/******/
+/******/ 	
 /******/ 	/* webpack/runtime/jsonp chunk loading */
 /******/ 	(() => {
 /******/ 		// no baseURI
-/******/
+/******/ 		
 /******/ 		// object to store loaded and loading chunks
 /******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
@@ -46820,19 +47107,19 @@ function valueEqual(a, b) {
 /******/ 			"/js/app": 0,
 /******/ 			"css/app": 0
 /******/ 		};
-/******/
+/******/ 		
 /******/ 		// no chunk on demand loading
-/******/
+/******/ 		
 /******/ 		// no prefetching
-/******/
+/******/ 		
 /******/ 		// no preloaded
-/******/
+/******/ 		
 /******/ 		// no HMR
-/******/
+/******/ 		
 /******/ 		// no HMR manifest
-/******/
+/******/ 		
 /******/ 		__webpack_require__.O.j = (chunkId) => (installedChunks[chunkId] === 0);
-/******/
+/******/ 		
 /******/ 		// install a JSONP callback for chunk loading
 /******/ 		var webpackJsonpCallback = (parentChunkLoadingFunction, data) => {
 /******/ 			var [chunkIds, moreModules, runtime] = data;
@@ -46855,20 +47142,20 @@ function valueEqual(a, b) {
 /******/ 			}
 /******/ 			return __webpack_require__.O(result);
 /******/ 		}
-/******/
+/******/ 		
 /******/ 		var chunkLoadingGlobal = self["webpackChunk"] = self["webpackChunk"] || [];
 /******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
 /******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
 /******/ 	})();
-/******/
+/******/ 	
 /************************************************************************/
-/******/
+/******/ 	
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
 /******/ 	__webpack_require__.O(undefined, ["css/app"], () => (__webpack_require__("./resources/js/app.tsx")))
 /******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/app"], () => (__webpack_require__("./resources/sass/app.scss")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
-/******/
+/******/ 	
 /******/ })()
 ;

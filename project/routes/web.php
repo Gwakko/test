@@ -12,12 +12,6 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-//
-//Auth::routes();
-//
-//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
-
 
 Route::prefix('auth')->name('auth.')->group(function() {
 
@@ -27,8 +21,10 @@ Route::prefix('auth')->name('auth.')->group(function() {
     Route::get('social/{user_id}/post-callback', [App\Http\Controllers\Auth\LoginController::class, 'signInSocial'])->name('sign-in.social');
 
     Route::middleware('auth:api')->group(function() {
+
         Route::post('token/sign-in', [App\Http\Controllers\Auth\LoginController::class, 'loginToken'])->name('login-token');
         Route::post('logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
+
     });
 
     Route::prefix('instagram')->group(function() {
