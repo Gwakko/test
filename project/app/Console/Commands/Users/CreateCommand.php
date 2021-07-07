@@ -4,6 +4,7 @@ namespace App\Console\Commands\Users;
 
 use App\Contracts\Services\UserServiceContract;
 use Illuminate\Console\Command;
+use Illuminate\Validation\ValidationException;
 
 /**
  * Class CreateCommand
@@ -47,9 +48,19 @@ class CreateCommand extends Command
      */
     public function handle(UserServiceContract $userService)
     {
-        $user = $userService->create($this->arguments());
+        try
+        {
+            $user = $userService->create($this->arguments());
 
-        $this->info(sprintf('Create user with ID: %s', $user->id));
+            $this->info(sprintf('Create user with ID: %s', $user->id));
+        }
+        catch (ValidationException $exception) {
+            foreach ($exception->errors() as $error => $messages) {
+                foreach ($messages as $message) {
+                    $this->error(sprintf('[%s]: %s', $error, $message));
+                }
+            }
+        }
 
         return 0;
     }
