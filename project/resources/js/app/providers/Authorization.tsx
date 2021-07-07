@@ -15,7 +15,7 @@ const Authorization = (props: Props) => {
     const {user, setUser} = useAuth();
     const history = useHistory<HistoryState>();
 
-    useEffect(() => {
+    const checkAccess = () => {
         const matched = matchRoutes(app.routes, history.location.pathname)[0];
 
         const auth = matched?.route?.auth || [];
@@ -25,37 +25,7 @@ const Authorization = (props: Props) => {
                 ? auth.includes(user.role)
                 : true
         );
-    }, []);
-
-    useEffect(() => {
-        if (!isAccessGranted) {
-            redirectRoute();
-        }
-    }, [isAccessGranted]);
-
-    useEffect(() => {
-        const matched = matchRoutes(app.routes, history.location.pathname)[0];
-
-        const auth = matched?.route?.auth || [];
-
-        setIsAccessGranted(
-            auth.length > 0
-            ? auth.includes(user.role)
-            : true
-        );
-    });
-
-    useEffect(() => {
-        const matched = matchRoutes(app.routes, history.location.pathname)[0];
-
-        const auth = matched?.route?.auth || [];
-
-        setIsAccessGranted(
-            auth.length > 0
-            ? auth.includes(user.role)
-            : true
-        );
-    }, [user, history.location.pathname]);
+    };
 
     const redirectRoute = () => {
         const {location} = history;
@@ -76,6 +46,24 @@ const Authorization = (props: Props) => {
             });
         }
     };
+
+    useEffect(() => {
+        checkAccess();
+    }, []);
+
+    useEffect(() => {
+        checkAccess();
+    });
+
+    useEffect(() => {
+        checkAccess();
+    }, [user, history.location.pathname]);
+
+    useEffect(() => {
+        if (!isAccessGranted) {
+            redirectRoute();
+        }
+    }, [isAccessGranted]);
 
     if (!isAccessGranted) {
         return null;
