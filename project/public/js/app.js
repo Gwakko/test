@@ -2610,32 +2610,14 @@ var Authorization = function Authorization(props) {
       setUser = _b.setUser;
 
   var history = react_router_dom_1.useHistory();
-  react_1.useEffect(function () {
+
+  var checkAccess = function checkAccess() {
     var _a;
 
     var matched = react_router_config_1.matchRoutes(app.routes, history.location.pathname)[0];
     var auth = ((_a = matched === null || matched === void 0 ? void 0 : matched.route) === null || _a === void 0 ? void 0 : _a.auth) || [];
     setIsAccessGranted(auth.length > 0 ? auth.includes(user.role) : true);
-  }, []);
-  react_1.useEffect(function () {
-    if (!isAccessGranted) {
-      redirectRoute();
-    }
-  }, [isAccessGranted]);
-  react_1.useEffect(function () {
-    var _a;
-
-    var matched = react_router_config_1.matchRoutes(app.routes, history.location.pathname)[0];
-    var auth = ((_a = matched === null || matched === void 0 ? void 0 : matched.route) === null || _a === void 0 ? void 0 : _a.auth) || [];
-    setIsAccessGranted(auth.length > 0 ? auth.includes(user.role) : true);
-  });
-  react_1.useEffect(function () {
-    var _a;
-
-    var matched = react_router_config_1.matchRoutes(app.routes, history.location.pathname)[0];
-    var auth = ((_a = matched === null || matched === void 0 ? void 0 : matched.route) === null || _a === void 0 ? void 0 : _a.auth) || [];
-    setIsAccessGranted(auth.length > 0 ? auth.includes(user.role) : true);
-  }, [user, history.location.pathname]);
+  };
 
   var redirectRoute = function redirectRoute() {
     var location = history.location;
@@ -2656,6 +2638,20 @@ var Authorization = function Authorization(props) {
       });
     }
   };
+
+  react_1.useEffect(function () {
+    checkAccess();
+  }, []);
+  react_1.useEffect(function () {
+    checkAccess();
+
+    if (!isAccessGranted) {
+      redirectRoute();
+    }
+  });
+  react_1.useEffect(function () {
+    checkAccess();
+  }, [user, history.location.pathname]);
 
   if (!isAccessGranted) {
     return null;

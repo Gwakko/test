@@ -53,17 +53,15 @@ const Authorization = (props: Props) => {
 
     useEffect(() => {
         checkAccess();
+
+        if (!isAccessGranted) {
+            redirectRoute();
+        }
     });
 
     useEffect(() => {
         checkAccess();
     }, [user, history.location.pathname]);
-
-    useEffect(() => {
-        if (!isAccessGranted) {
-            redirectRoute();
-        }
-    }, [isAccessGranted]);
 
     if (!isAccessGranted) {
         return null;
